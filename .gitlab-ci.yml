@@ -27,7 +27,7 @@ build:
 test:
   stage: test
   variables:
-    test_path: "$project/test/$project.UnitTests"
+    test_path: "./src/Otus.Teaching.PromoCodeFactory.UnitTests"
   script:
     - "cd $test_path"
     - "dotnet test"
