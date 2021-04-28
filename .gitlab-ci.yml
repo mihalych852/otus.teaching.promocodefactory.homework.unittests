@@ -24,11 +24,9 @@ build:
   tags: 
     - docker
     
-test:
-  stage: test
-  variables:
-    test_path: "./src/Otus.Teaching.PromoCodeFactory.UnitTests"
-  script:
-    - "cd $test_path"
-    - "dotnet test"
-            
+unit_tests:
+    stage: test
+    script: dotnet vstest *UnitTests/bin/*/*/*UnitTests.dll --Blame
+    rules:
+        - exists:
+            - "*UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj"
