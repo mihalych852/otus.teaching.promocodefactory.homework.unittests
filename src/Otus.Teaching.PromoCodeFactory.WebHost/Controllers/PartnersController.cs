@@ -86,23 +86,22 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             if (!partner.IsActive)
                 return BadRequest("Данный партнер не активен");
             
-            //Установка лимита партнеру
             var activeLimit = partner.PartnerLimits.FirstOrDefault(x => 
                 !x.CancelDate.HasValue);
             
-            if (activeLimit != null)
+            if (request.Limit > 0 && activeLimit != null)
             {
                 //Если партнеру выставляется лимит, то мы 
-                //должны обнулить количество промокодов, которые партнер выдал, если лимит закончился, 
+                //должны обнулить количество промокодов, которые партнер выдал,
+                //если лимит закончился, 
                 //то количество не обнуляется
-                partner.NumberIssuedPromoCodes = 0;
-                
+                if (activeLimit.EndDate > DateTime.Now) 
+                    partner.NumberIssuedPromoCodes = 0;
+
                 //При установке лимита нужно отключить предыдущий лимит
                 activeLimit.CancelDate = DateTime.Now;
-            }
-
-            if (request.Limit <= 0)
-                return BadRequest("Лимит должен быть больше 0");
+            } 
+            else return BadRequest("Лимит должен быть больше 0");
             
             var newLimit = new PartnerPromoCodeLimit()
             {

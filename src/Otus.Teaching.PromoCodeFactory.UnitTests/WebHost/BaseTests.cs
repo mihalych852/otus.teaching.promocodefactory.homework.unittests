@@ -2,7 +2,6 @@
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost
 {

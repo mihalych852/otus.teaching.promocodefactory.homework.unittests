@@ -1,21 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentAssertions;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.WebHost.Controllers;
-using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 {
-    public class SetPartnerPromoCodeLimitAsyncTests
+    public class SetPartnerPromoCodeLimitMockAsyncTests
     {
         private readonly PartnersController _partnersController;
         private readonly Mock<IRepository<Partner>> _partnersRepositoryMock;
 
-        public SetPartnerPromoCodeLimitAsyncTests()
+        public SetPartnerPromoCodeLimitMockAsyncTests()
         {
             _partnersRepositoryMock = new Mock<IRepository<Partner>>();
             _partnersController = new PartnersController(_partnersRepositoryMock.Object);
@@ -31,10 +31,12 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
                 ReturnsAsync(() => null);
 
             // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(Guid.NewGuid(), limitRequest) as NotFoundResult;
+            var actionResult = await _partnersController.SetPartnerPromoCodeLimitAsync(Guid.NewGuid(), limitRequest) as NotFoundResult;
+            var result = actionResult as NotFoundResult;
 
             // Assert
-            Assert.Equal(result.StatusCode, 404);
+            actionResult.Should().BeAssignableTo<NotFoundResult>();
+            result.StatusCode.Should().Be(404);
         }
 
         [Fact]
@@ -48,14 +50,14 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
                 ReturnsAsync(() => BaseTests.CreateBasePartner(false));
 
             // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partnerId, limitRequest) as BadRequestObjectResult;
+            var actionResult = await _partnersController.SetPartnerPromoCodeLimitAsync(partnerId, limitRequest);
+            var result = actionResult as BadRequestObjectResult;
 
             // Assert
-            Assert.Equal(result.StatusCode, 400);
+            actionResult.Should().BeAssignableTo<BadRequestObjectResult>();
+            result.StatusCode.Should().Be(400);
 
         }
 
-
-      
     }
 }

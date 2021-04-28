@@ -24,15 +24,11 @@ build:
   tags: 
     - docker
     
-test:
+unit_tests:
     stage: test
-    script:
-        - 'dotnet test --test-adapter-path:. --logger:"junit;LogFilePath=..\artifacts\{assembly}-test-result.xml;MethodFormat=Class;FailureBodyFormat=Verbose"'
-    artifacts:
-        when: always
-    paths:
-      - ./**/*test-result.xml
-    reports:
-      junit:
-        - ./**/*test-result.xml
+    script: dotnet vstest *UnitTests/bin/*/*/*UnitTests.dll --Blame
+    rules:
+        -exists:
+            -*UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj
+    
             
