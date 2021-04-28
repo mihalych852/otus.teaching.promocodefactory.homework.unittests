@@ -28,7 +28,5 @@ unit_tests:
     stage: test
     script: dotnet vstest *UnitTests/bin/*/*/*UnitTests.dll --Blame
     rules:
-        -exists:
-            -*UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj
-    
-            
+        - exists:
+            - "*UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj"
