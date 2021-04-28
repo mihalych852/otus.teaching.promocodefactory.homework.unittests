@@ -2,6 +2,10 @@ image: docker:stable
 
 services:
   - docker:dind
+  
+stages:
+    - build
+    - test
 
 before_script:
   - docker info
@@ -19,3 +23,12 @@ build:
   stage: build
   tags: 
     - docker
+    
+unit_tests:
+    stage: test
+    script: dotnet vstest *UnitTests/bin/*/*/*UnitTests.dll --Blame
+    rules:
+        -exists:
+            -*UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj
+    
+            

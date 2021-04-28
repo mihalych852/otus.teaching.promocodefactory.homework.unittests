@@ -121,6 +121,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                 Id = Guid.Parse("894b6e9b-eb5f-406c-aefa-8ccb35d39319"),
                 Name = "Каждому кота",
                 IsActive = true,
+                NumberIssuedPromoCodes = 5,
                 PartnerLimits = new List<PartnerPromoCodeLimit>()
                 {
                     new PartnerPromoCodeLimit()
@@ -128,7 +129,7 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
                         Id = Guid.Parse("c9bef066-3c5a-4e5d-9cff-bd54479f075e"),
                         CreateDate = new DateTime(2020,05,3),
                         EndDate = new DateTime(2020,10,15),
-                        CancelDate = new DateTime(2020,06,16),
+                        CancelDate = new DateTime(2021,08,20),
                         Limit = 1000 
                     },
                     new PartnerPromoCodeLimit()
