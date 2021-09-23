@@ -1,21 +1,34 @@
-image: docker:stable
+stages:
+    - build and test 
+    - release
 
-services:
-  - docker:dind
+build and test:
+    stage: build and test
+    only:
+        - merge_requests
+    image: mcr.microsoft.com/dotnet/sdk:5.0
+    before_script:
+        - cd src
+    script:
+        - dotnet restore
+        - dotnet build
+        - dotnet test
 
-before_script:
-  - docker info
-
-build:
-  only:
-    - master
-  before_script:
-    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-  script:
-    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest src
-    - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
-  after_script:
-    - docker logout ${CI_REGISTRY}
-  stage: build
-  tags: 
-    - docker
+release:
+    stage: release
+    only:
+        - master
+    image: docker:stable
+    services:
+        - docker:dind
+    tags: 
+        - docker
+    before_script:
+        - docker info
+        - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
+    script:
+        - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest src
+        - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
+    after_script:
+        - docker logout ${CI_REGISTRY}
+    
