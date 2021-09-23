@@ -113,6 +113,29 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Fact]
+        public async Task SetPartnerPromoCodeLimitAsync_SetNewLimitWithAlreadyActiveLimit_CancelPreviousPromoCode()
+        {
+            // Arrange
+            var activePromoCodeLimit = _fixture
+                .Build<PartnerPromoCodeLimit>().Without(p => p.CancelDate).Create();
+
+            var partner = _fixture
+                .Build<Partner>()
+                .With(p => p.PartnerLimits, new List<PartnerPromoCodeLimit> { activePromoCodeLimit }).Create();
+
+            var request = _fixture.Create<SetPartnerPromoCodeLimitRequest>();
+
+            _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id))
+                .ReturnsAsync(partner);
+
+            // Act
+            await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
+
+            // Assert
+            activePromoCodeLimit.CancelDate.Should().NotBeNull();
+        }
+
+        [Fact]
         public async Task SetPartnerPromoCodeLimitAsync_SetNegativeLimits_ReturnsBadRequestsOnNegativeLimits()
         {
             // Arrange
