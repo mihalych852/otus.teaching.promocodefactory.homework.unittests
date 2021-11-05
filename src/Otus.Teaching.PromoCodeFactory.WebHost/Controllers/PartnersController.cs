@@ -88,7 +88,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             
             //Установка лимита партнеру
             var activeLimit = partner.PartnerLimits.FirstOrDefault(x => 
-                !x.CancelDate.HasValue);
+                !x.CancelDate.HasValue && x.EndDate > DateTime.Now);
             
             if (activeLimit != null)
             {
