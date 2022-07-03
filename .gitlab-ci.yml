@@ -7,7 +7,7 @@ before_script:
   - docker info
 
   variables: 
-    test: "otus.teaching.promocodefactory.homework.unittests/src/Otus.Teaching.PromoCodeFactory.UnitTests" 
+    test: "Otus.Teaching.PromoCodeFactory.UnitTests" 
 
 
 build:
