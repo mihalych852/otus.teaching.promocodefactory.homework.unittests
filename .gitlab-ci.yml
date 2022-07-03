@@ -9,6 +9,7 @@ before_script:
   variables: 
     test: "otus.teaching.promocodefactory.homework.unittests/src/Otus.Teaching.PromoCodeFactory.UnitTests" 
 
+
 build:
   only:
     - master
@@ -28,3 +29,4 @@ build:
       script:
         - "cd $test"
         - "dotnet test"
+
