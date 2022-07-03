@@ -66,7 +66,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Act
             var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partnerId, _request);
 
-            //Arrange
+            //Assert
             result.Should().BeAssignableTo<NotFoundResult>();
         }
 
@@ -83,7 +83,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Act
             var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, _request);
 
-            //Arrange
+            //Assert
             result.Should().BeAssignableTo<BadRequestObjectResult>();
         }
 
@@ -101,9 +101,8 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Act
             var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, _request);
 
-            //Arrange
+            //Assert
             Assert.Equal(0, partner.NumberIssuedPromoCodes);
-            // result.Should().BeAssignableTo<CreatedAtActionResult>();
         }
 
         [Fact]
@@ -121,9 +120,8 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Act
             var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, _request);
 
-            //Arrange
+            //Assert
             Assert.Equal(DateTime.Now.ToShortDateString(), activeLimit.CancelDate.Value.ToShortDateString());
-            // result.Should().BeAssignableTo<CreatedAtActionResult>();
         }
 
         [Fact]
@@ -140,9 +138,8 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Act
             var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, _request);
 
-            //Arrange
+            //Assert
             Assert.True(_request.Limit > 0);
-            // result.Should().BeAssignableTo<CreatedAtActionResult>();
         }
 
         [Fact]
@@ -161,7 +158,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             var partnerFromDb = await _partnersRepositoryMock.Object.GetByIdAsync(partner.Id);
             var newPartnerLimit = partnerFromDb.PartnerLimits.Where(l => l.Limit == partner.PartnerLimits.FirstOrDefault().Limit).FirstOrDefault();
 
-            //Arrange
+            //Assert
             Assert.NotNull(newPartnerLimit);
         }
 
