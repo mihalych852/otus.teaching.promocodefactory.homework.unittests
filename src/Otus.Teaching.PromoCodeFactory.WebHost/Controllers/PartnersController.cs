@@ -120,6 +120,8 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             return CreatedAtAction(nameof(GetPartnerLimitAsync), new {id = partner.Id, limitId = newLimit.Id}, null);
         }
         
+        //TODO: сделать нормальную проверку лимитов
+
         [HttpPost("{id}/canceledLimits")]
         public async Task<IActionResult> CancelPartnerPromoCodeLimitAsync(Guid id)
         {
