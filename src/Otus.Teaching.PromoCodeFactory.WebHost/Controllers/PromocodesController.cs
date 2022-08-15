@@ -18,10 +18,12 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         : ControllerBase
     {
         private readonly IRepository<PromoCode> _promoCodesRepository;
+        private readonly IRepository<Preference> _preferenceRepository;
 
-        public PromocodesController(IRepository<PromoCode> promoCodesRepository)
+        public PromocodesController(IRepository<PromoCode> promoCodesRepository, IRepository<Preference> preferenceRepository)
         {
             _promoCodesRepository = promoCodesRepository;
+            _preferenceRepository = preferenceRepository;
         }
         
         /// <summary>
@@ -51,10 +53,23 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public Task<IActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request)
+        public async Task<IActionResult> GivePromoCodesToCustomersWithPreferenceAsync(GivePromoCodeRequest request)
         {
             //TODO: Создать промокод и выдать его клиентам с указанным предпочтением
             throw new NotImplementedException();
+
+            //var preferences = await _preferenceRepository.GetAllAsync();
+            //var preference = preferences.Where(x => x.Name == request.Preference).FirstOrDefault();
+
+            //var promocode = new PromoCode()
+            //{
+            //      Code = request.PromoCode,
+            //      ServiceInfo = request.ServiceInfo,
+            //      BeginDate = DateTime.Now,
+            //      EndDate = DateTime.Now,// ???????
+            //      PartnerName = request.PartnerName,
+            //      Preference = preference
+            //};
         }
     }
 }
