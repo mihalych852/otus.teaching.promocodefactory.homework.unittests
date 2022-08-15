@@ -5,7 +5,7 @@ stages:
   - test
 
 variables:
-  OBJECTS_DIRECTORY: 'obj'
+  OBJECTS_DIRECTORY: '**/obj'
   NUGET_PACKAGES_DIRECTORY: 'src/.nuget'
   SLN_PATH: src/Otus.Teaching.PromoCodeFactory.sln
 
