@@ -5,27 +5,14 @@ stages:
   - test
 
 variables:
-  OBJECTS_DIRECTORY: 'obj'
-  NUGET_PACKAGES_DIRECTORY: 'src/.nuget'
   SLN_PATH: src/Otus.Teaching.PromoCodeFactory.sln
-
-cache:
-  key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
-  paths:
-    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/project.assets.json'
-    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/*.csproj.nuget.*'
-    - '$NUGET_PACKAGES_DIRECTORY'
-  policy: pull-push
-
-before_script:
-  - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY' src/Otus.Teaching.PromoCodeFactory.sln
 
 build:
   stage: build
   script:
-    - 'dotnet build --no-restore $SLN_PATH'
+    - 'dotnet build  $SLN_PATH'
 
 tests:
   stage: test
   script:
-    - 'dotnet test --no-restore SLN_PATH'
+    - 'dotnet test  SLN_PATH'
