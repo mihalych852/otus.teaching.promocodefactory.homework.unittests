@@ -1,21 +1,31 @@
-image: docker:stable
+image: mcr.microsoft.com/dotnet/sdk:3.1.422-alpine3.16
 
-services:
-  - docker:dind
+stages:
+  - build
+  - test
+
+variables:
+  OBJECTS_DIRECTORY: 'obj'
+  NUGET_PACKAGES_DIRECTORY: 'src/.nuget'
+  SLN_PATH: src/Otus.Teaching.PromoCodeFactory.sln
+
+cache:
+  key: "$CI_JOB_STAGE-$CI_COMMIT_REF_SLUG"
+  paths:
+    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/project.assets.json'
+    - '$SOURCE_CODE_PATH$OBJECTS_DIRECTORY/*.csproj.nuget.*'
+    - '$NUGET_PACKAGES_DIRECTORY'
+  policy: pull-push
 
 before_script:
-  - docker info
+  - 'dotnet restore --packages $NUGET_PACKAGES_DIRECTORY' src/Otus.Teaching.PromoCodeFactory.sln
 
 build:
-  only:
-    - master
-  before_script:
-    - docker login registry.gitlab.com -u ${CI_REGISTRY_USER} -p ${CI_REGISTRY_PASSWORD}
-  script:
-    - docker build -t ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest src
-    - docker push ${CI_REGISTRY}/${CI_PROJECT_PATH}:latest
-  after_script:
-    - docker logout ${CI_REGISTRY}
   stage: build
-  tags: 
-    - docker
+  script:
+    - 'dotnet build --no-restore $SLN_PATH'
+
+tests:
+  stage: test
+  script:
+    - 'dotnet test --no-restore SLN_PATH'
