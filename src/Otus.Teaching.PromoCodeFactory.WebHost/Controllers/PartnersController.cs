@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
+using Otus.Teaching.PromoCodeFactory.Core.Common;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 
@@ -18,10 +19,12 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         : ControllerBase
     {
         private readonly IRepository<Partner> _partnersRepository;
+        private readonly ICurrentDateTimeProvider _currentDateTimeProvider;
 
-        public PartnersController(IRepository<Partner> partnersRepository)
+        public PartnersController(IRepository<Partner> partnersRepository, ICurrentDateTimeProvider currentDateTimeProvider)
         {
             _partnersRepository = partnersRepository;
+            _currentDateTimeProvider = currentDateTimeProvider;
         }
 
         [HttpGet]
@@ -98,7 +101,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 partner.NumberIssuedPromoCodes = 0;
                 
                 //При установке лимита нужно отключить предыдущий лимит
-                activeLimit.CancelDate = DateTime.Now;
+                activeLimit.CancelDate = _currentDateTimeProvider.CurrentDateTime;
             }
 
             if (request.Limit <= 0)

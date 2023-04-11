@@ -11,6 +11,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.Builders
         {
             _partner = new Partner()
             {
+                Id = guid,
                 Name = "СуперЗверушки",
                 IsActive = true,
                 NumberIssuedPromoCodes = 20,
@@ -39,14 +40,13 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.Builders
             return this;
         }
 
-        public PartnerBuilder WithPromoCodeLimits(PartnerPromoCodeLimit promocodeLimit)
+        public PartnerBuilder WithEmptyPromoCodeLimits()
         {
-            promocodeLimit.PartnerId = _partner.Id;
-            _partner.PartnerLimits.Add(promocodeLimit);
+            _partner.PartnerLimits = new List<PartnerPromoCodeLimit>();
             return this;
         }
 
-        public PartnerBuilder WithPromocodesCound(int numberIssuedPromocodes)
+        public PartnerBuilder WithPromocodesCount(int numberIssuedPromocodes)
         {
             _partner.NumberIssuedPromoCodes = numberIssuedPromocodes;
             return this;
