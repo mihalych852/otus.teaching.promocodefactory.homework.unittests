@@ -135,9 +135,10 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         {
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
 
+            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
             var partner = new PartnerBuilder(partnerId).Build();
+
             var partnerLimit = partner.PartnerLimits.First();
 
             _partnerRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
@@ -149,8 +150,53 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             result.Should().BeAssignableTo<CreatedAtActionResult>();
             partnerLimit.CancelDate.Should().Be(NowDate);
 
+        }
+
+        //5. Лимит должен быть больше 0.
+        [Fact]
+        public async void SetPartnerPromoCodeLimitAsync_IfLimitNegative_ShouldReturnBadRequest()
+        {
+
+            //Arrange
+            var request = new PartnerPromoCodeLimitRequestBulider().WithLimit(-1).Build();
+
+            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
+            var partner = new PartnerBuilder(partnerId).Build();
+
+            _partnerRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
+
+            //Act
+            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
+
+            //Assert
+            result.Should().BeAssignableTo<BadRequestObjectResult>();
 
 
+        }
+        /// <summary>
+        /// 6. Нужно убедиться, что сохранили новый лимит в базу данных (это нужно проверить Unit-тестом).
+        /// </summary>
+
+        [Fact]
+        public async void SetPartnerPromoCodeLimitAsync_IfSetLimit_ShouldAddNewLimitIntoDb()
+        {
+            //Arrange
+            var request = new PartnerPromoCodeLimitRequestBulider().Build();
+
+            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
+            var partner = new PartnerBuilder(partnerId).Build();
+
+            var partnerLimit = partner.PartnerLimits.First();
+
+            _partnerRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
+
+            // Act
+            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
+
+
+            //Assert
+            result.Should().BeAssignableTo<CreatedAtActionResult>();
+            _partnerRepositoryMock.Verify(p => p.UpdateAsync(partner), Times.Once());
         }
     }
 }
