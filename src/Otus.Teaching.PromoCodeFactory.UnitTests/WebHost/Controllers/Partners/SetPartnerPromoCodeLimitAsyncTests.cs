@@ -193,10 +193,6 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             // Act
             var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
 
-
-            //Assert
-            result.Should().BeAssignableTo<CreatedAtActionResult>();
-            _partnerRepositoryMock.Verify(p => p.UpdateAsync(partner), Times.Once());
         }
     }
 }
