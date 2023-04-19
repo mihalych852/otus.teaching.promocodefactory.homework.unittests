@@ -42,21 +42,25 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         }
 
+
+        // Варианты Id партнеров для использования в Тестах
+        Guid partnerId_1 = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
+        Guid partnerId_2 = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
+
         //1. Если партнер не найден, то также нужно выдать ошибку 404;
         [Fact]
         public async Task SetPartnerPromoCodeLimitAsync_If_Partner_IsNotFound_Returns_StatusCode_404()
         {
 
             //Arrange
-            var partnerId = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
             Partner partner = null;
 
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
 
-            _partnerRepositoryMock.Setup(p => p.GetByIdAsync(partnerId)).ReturnsAsync(partner);
+            _partnerRepositoryMock.Setup(p => p.GetByIdAsync(partnerId_1)).ReturnsAsync(partner);
 
             //Act
-            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId, request);
+            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId_1, request);
             //Assert
             result.Should().BeAssignableTo<NotFoundResult>();
 
@@ -68,15 +72,14 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         {
 
             //Arrange
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).IsActive(false).Build();
+            var partner = new PartnerBuilder(partnerId_2).IsActive(false).Build();
 
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
 
-            _partnerRepositoryMock.Setup(p => p.GetByIdAsync(partnerId)).ReturnsAsync(partner);
+            _partnerRepositoryMock.Setup(p => p.GetByIdAsync(partnerId_2)).ReturnsAsync(partner);
 
             //Act
-            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId, request);
+            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId_2, request);
             //Assert
             result.Should().BeAssignableTo<BadRequestObjectResult>();
 
@@ -90,8 +93,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         {
             
             //Arrange
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).Build();
+            var partner = new PartnerBuilder(partnerId_2).Build();
 
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
 
@@ -113,8 +115,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         public async void SetPartnerPromoCodeLimitAsync_If_Partner_Has_NoActiveLimit_ShouldNotResetIssuedPromocodes()
         {
             //Arrange
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).WithEmptyPromoCodeLimits().WithPromocodesCount(1).Build();
+            var partner = new PartnerBuilder(partnerId_2).WithEmptyPromoCodeLimits().WithPromocodesCount(1).Build();
 
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
             
@@ -136,15 +137,15 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
 
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).Build();
+
+            var partner = new PartnerBuilder(partnerId_2).Build();
 
             var partnerLimit = partner.PartnerLimits.First();
 
             _partnerRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
 
             //Act
-            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId, request);
+            var result = await _partnerController.SetPartnerPromoCodeLimitAsync(partnerId_2, request);
 
             //Assert
             result.Should().BeAssignableTo<CreatedAtActionResult>();
@@ -160,8 +161,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().WithLimit(-1).Build();
 
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).Build();
+            var partner = new PartnerBuilder(partnerId_2).Build();
 
             _partnerRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
 
@@ -183,8 +183,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
 
-            var partnerId = Guid.Parse("7d994823-8226-4273-b063-1a95f3cc1df8");
-            var partner = new PartnerBuilder(partnerId).Build();
+            var partner = new PartnerBuilder(partnerId_2).Build();
 
             var partnerLimit = partner.PartnerLimits.First();
 
