@@ -1,5 +1,8 @@
 image: mcr.microsoft.com/dotnet/sdk:7.0
 
+variables:
+  PROJ_NAME: Otus.Teaching.PromoCodeFactory.WebHost
+
 stages:
   - build
   - test
@@ -9,7 +12,7 @@ build:
     - docker
   stage: build
   script:
-    - dotnet build src/Otus.Teaching.PromoCodeFactory.WebHost/Otus.Teaching.PromoCodeFactory.WebHost.csproj -c Release -o content
+    - dotnet build src/$PROJ_NAME/$PROJ_NAME.csproj -c Release -o content
   artifacts:
     paths:
       - content
