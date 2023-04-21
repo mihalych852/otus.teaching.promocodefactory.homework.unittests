@@ -9,7 +9,7 @@ stages:
 
 build:
   tags: 
-    - docker_build
+    - docker
   stage: build
   script:
     - dotnet build src/$PROJ_NAME/$PROJ_NAME.csproj -c Release -o content
@@ -19,7 +19,7 @@ build:
 
 tests:
   tags:
-    - docker_tests
+    - docker
   stage: test
   script:
     - cd ./src
