@@ -1,19 +1,23 @@
-image: mcr.microsoft.com/dotnet/core/sdk:7.0
+image: mcr.microsoft.com/dotnet/sdk:7.0
 
 stages:
-    - build
-    - test
-
-before_script:
-    - cd src
-    - dotnet restore
+  - build
+  - test
 
 build:
-    stage: build
-    script:
-        - dotnet build
+  tags: 
+    - docker
+  stage: build
+  script:
+    - dotnet build src/Otus.Teaching.PromoCodeFactory.WebHost/Otus.Teaching.PromoCodeFactory.WebHost.csproj -c Release -o content
+  artifacts:
+    paths:
+      - content
 
-test:
-    stage: test
-    script:
-        - dotnet test
+tests:
+  tags:
+    - docker
+  stage: test
+  script:
+    - cd ./src
+    - dotnet test
