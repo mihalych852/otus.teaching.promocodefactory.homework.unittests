@@ -1,20 +1,19 @@
-image: mcr.microsoft.com/dotnet/core/sdk:3.1
+image: mcr.microsoft.com/dotnet/core/sdk:7.0
 
 stages:
-  - build
-  - test
+    - build
+    - test
 
 before_script:
     - cd src
     - dotnet restore
 
 build:
-  stage: build
-  script:
-    - 'cd ./src'
-    - 'dotnet build'
+    stage: build
+    script:
+        - dotnet build
+
 test:
     stage: test
     script:
-    - 'cd ./src'
-    - 'dotnet test'
+        - dotnet test
