@@ -49,7 +49,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         //1. Если партнер не найден, то также нужно выдать ошибку 404;
         [Fact]
-        public async Task SetPartnerPromoCodeLimitAsync_If_Partner_IsNotFound_Returns_StatusCode_404()
+        public async Task SetPartnerPromoCodeLimitAsync_PartnerIsNotFound_Return404()
         {
 
             //Arrange
@@ -68,7 +68,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         //2. Если партнер заблокирован, то есть поле IsActive=false в классе Partner, то также нужно выдать ошибку 400.
         [Fact]
-        public async Task SetPartnerPromoCodeLimitAsync_If_Partner_IsNotActive_Returns_StatusCode_400()
+        public async Task SetPartnerPromoCodeLimitAsync_PartnersNotActive_Return400()
         {
 
             //Arrange
@@ -89,7 +89,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         /// 3. Если партнеру выставляется лимит, то мы должны обнулить количество промокодов, которые партнер выдал NumberIssuedPromoCodes.
         /// если лимит закончился, то количество не обнуляется.
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_If_Partner_Has_ActiveLimit_ResetIssuedPromoCodes()
+        public async void SetPartnerPromoCodeLimitAsync_PartnerHasActiveLimit_ResetIssuedPromoCodes()
         {
             
             //Arrange
@@ -112,7 +112,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         // если лимит закончился, то количество не обнуляется.
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_If_Partner_Has_NoActiveLimit_ShouldNotResetIssuedPromocodes()
+        public async void SetPartnerPromoCodeLimitAsync_PartnerHasNoActiveLimit_NotResetIssuedPromocodes()
         {
             //Arrange
             var partner = new PartnerBuilder(partnerId_2).WithEmptyPromoCodeLimits().WithPromocodesCount(1).Build();
@@ -132,7 +132,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         // 4. При установке лимита нужно отключить предыдущий лимит.
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_If_Set_Limit_ShouldResetPreviousLimit()
+        public async void SetPartnerPromoCodeLimitAsync_SetLimit_ResetPreviousLimit()
         {
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().Build();
@@ -149,13 +149,13 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
             //Assert
             result.Should().BeAssignableTo<CreatedAtActionResult>();
-            partnerLimit.CancelDate.Should().Be(NowDate);
+            partnerLimit.CancelDate.Should().Be(NowDate.Date);
 
         }
 
         //5. Лимит должен быть больше 0.
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_IfLimitNegative_ShouldReturnBadRequest()
+        public async void SetPartnerPromoCodeLimitAsync_LimitNegative_ReturnBadRequest()
         {
 
             //Arrange
@@ -178,7 +178,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         /// </summary>
 
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_IfSetLimit_ShouldAddNewLimitIntoDb()
+        public async void SetPartnerPromoCodeLimitAsync_SetLimit_AddNewLimitIntoDb()
         {
             //Arrange
             var request = new PartnerPromoCodeLimitRequestBulider().Build();

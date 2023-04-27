@@ -38,7 +38,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.Builders
 
         public PartnerLimitBuilder CanceledAt(DateTime canceledAt)
         {
-            _partnerLimit.CancelDate = canceledAt;
+            _partnerLimit.CancelDate = canceledAt.Date;
             return this;
         }
 
