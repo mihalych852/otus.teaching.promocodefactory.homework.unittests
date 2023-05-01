@@ -339,3 +339,6 @@ ASALocalRun/
 .localhistory/
 
 .vscode/
+/src/Otus.Teaching.PromoCodeFactory.WebHost/PromoCodeFactoryDb.sqlite-wal
+/src/Otus.Teaching.PromoCodeFactory.WebHost/PromoCodeFactoryDb.sqlite-shm
+/src/Otus.Teaching.PromoCodeFactory.WebHost/PromoCodeFactoryDb.sqlite

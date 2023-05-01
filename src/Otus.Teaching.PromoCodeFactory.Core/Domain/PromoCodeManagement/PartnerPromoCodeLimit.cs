@@ -4,6 +4,8 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 {
     public class PartnerPromoCodeLimit
     {
+        private DateTime? _cancelDate;
+
         public Guid Id { get; set; }
 
         public Guid PartnerId { get; set; }
@@ -12,7 +14,17 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
         
         public DateTime CreateDate { get; set; }
 
-        public DateTime? CancelDate { get; set; }
+        public DateTime? CancelDate
+        {
+            get
+            {
+                return _cancelDate?.Date;
+            }
+            set
+            {
+                _cancelDate = value;
+            }
+        }
 
         public DateTime EndDate { get; set; }
 
