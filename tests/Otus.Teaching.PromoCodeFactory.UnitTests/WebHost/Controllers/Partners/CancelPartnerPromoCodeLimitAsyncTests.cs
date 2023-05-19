@@ -8,7 +8,7 @@ using Moq;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
 using Otus.Teaching.PromoCodeFactory.WebHost.Controllers;
-using Xunit;
+using NUnit.Framework;
 
 namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 {
@@ -46,8 +46,8 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             return partner;
         }
         
-        [Fact]
-        public async void CancelPartnerPromoCodeLimitAsync_PartnerIsNotFound_ReturnsNotFound()
+        [Test]
+        public void CancelPartnerPromoCodeLimitAsync_PartnerIsNotFound_ReturnsNotFound()
         {
             // Arrange
             var partnerId = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
@@ -57,14 +57,14 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
                 .ReturnsAsync(partner);
 
             // Act
-            var result = await _partnersController.CancelPartnerPromoCodeLimitAsync(partnerId);
+            var result = _partnersController.CancelPartnerPromoCodeLimitAsync(partnerId).GetAwaiter().GetResult();
  
             // Assert
             result.Should().BeAssignableTo<NotFoundResult>();
         }
         
-        [Fact]
-        public async void CancelPartnerPromoCodeLimitAsync_PartnerIsNotActive_ReturnsBadRequest()
+        [Test]
+        public void CancelPartnerPromoCodeLimitAsync_PartnerIsNotActive_ReturnsBadRequest()
         {
             // Arrange
             var partnerId = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
@@ -75,7 +75,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
                 .ReturnsAsync(partner);
 
             // Act
-            var result = await _partnersController.CancelPartnerPromoCodeLimitAsync(partnerId);
+            var result = _partnersController.CancelPartnerPromoCodeLimitAsync(partnerId).GetAwaiter().GetResult();
  
             // Assert
             result.Should().BeAssignableTo<BadRequestObjectResult>();
