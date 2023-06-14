@@ -49,7 +49,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Partner_Not_Found_Error_404()
+        public void Partner_NotExist_Error404()
         {
             // Given
             var obj = _fixture.Build<Partner>().WithAutoProperties().With(p => p.IsActive, true).Create();
@@ -62,7 +62,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Partner_Blocked_Error_400()
+        public void Partner_Blocked_Error400()
         {
             // Given
             var obj = _fixture.Build<Partner>().WithAutoProperties().With(p => p.IsActive, false).Create();
@@ -74,7 +74,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Set_Partner_Limit_Limit_Must_Reset_To_0()
+        public void PartnerSetLimit_Limit_MustResetTo0()
         {
             // Given 
             var obj = _fixture.Build<Partner>()
@@ -99,7 +99,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Set_Partner_Limit_Limit_Must_Reset_NotTo_0()
+        public void PartnerSetLimit_Limit_MustResetNOTTo0()
         {
             // Given
             var limitsCount = 3; 
@@ -126,7 +126,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Set_Partner_Limit_PrevLimit_Must_Disabled()
+        public void PartnerSetLimit_PrevLimit_MustDisabled()
         {
             // Given
             var limitsCount = 3; 
@@ -152,7 +152,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Set_Partner_NewLimit_But_Limit_Must_Be_More_0()
+        public void PartnerSetNewLimit_Limit_MustBeMore0()
         {
             // Given 
             var obj = _fixture.Build<Partner>()
@@ -171,7 +171,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         }
 
         [Test]
-        public void Set_Partner_Limit_Check_It_In_Database_UpdatedValue()
+        public void PartnerSetLimit_Database_UpdatedValue()
         {
             IServiceCollection services = new ServiceCollection();
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
