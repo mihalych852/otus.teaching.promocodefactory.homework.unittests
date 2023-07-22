@@ -33,7 +33,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         //Если партнер не найден, то также нужно выдать ошибку 404;
         [Fact]
-        public async void TestPatnerNotFound()
+        public async void SetPartnerPromoCodeLimitAsyncTests_PatnerIsNotFound_ReturnNotFound()
         {
             Guid guid = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
 
@@ -49,7 +49,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         [Fact]
         //Если партнер заблокирован, то есть поле IsActive=false в классе Partner, то также нужно выдать ошибку 400;
-        public async void TestPartnerIsBlocked()
+        public async void SetPartnerPromoCodeLimitAsyncTests_PatnerIsNotActive_ReturnNotFound()
         {
             Partner partner = this.CreateBasePartner();
             partner.IsActive = false;
@@ -65,7 +65,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         [Fact]
         //Если партнеру выставляется лимит, то мы должны обнулить количество промокодов, которые партнер выдал NumberIssuedPromoCodes
-        public async void TestWirteToDatabase()
+        public async void SetPartnerPromoCodeLimitAsyncTests_PartnerSetLimit_NumberIssuedPromoCodesIs0()
         {
             Partner partner = this.CreateBasePartner();
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
@@ -77,12 +77,12 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, setPartnerPromoCodeLimitRequest);
 
             // Assert
-            Assert.True(partner.NumberIssuedPromoCodes == 0);
+            Assert.Equal(0, partner.NumberIssuedPromoCodes);
         }
 
         [Fact]
         //если лимит закончился, то количество не обнуляется
-        public async void TestWirteToDatabase2()
+        public async void SetPartnerPromoCodeLimitAsyncTests_ThereIsALimitFinished_NumberIssuedPromoCodesIsNot0()
         {
             Partner partner = this.CreateBasePartner();
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
@@ -95,12 +95,12 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, setPartnerPromoCodeLimitRequest);           /*Задать лимит пользователю*/
 
             // Assert
-            Assert.Equal(1, partner.NumberIssuedPromoCodes);
+            Assert.NotEqual(0, partner.NumberIssuedPromoCodes);
         }
 
         [Fact]
         //При установке лимита нужно отключить предыдущий лимит;
-        public async void TestWirteToDatabase3()
+        public async void SetPartnerPromoCodeLimitAsyncTests_SetLimit_DisablePreviousLimit()
         {
             Partner partner = this.CreateBasePartner();
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
@@ -118,7 +118,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         [Fact]
         //Лимит должен быть больше 0;
-        public async void TestWirteToDatabase4()
+        public async void SetPartnerPromoCodeLimitAsyncTests_SetLimit0_ReturnBadResult()
         {
             Partner partner = this.CreateBasePartner();
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
@@ -135,9 +135,11 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
         [Fact]
         //Нужно убедиться, что сохранили новый лимит в базу данных(это нужно проверить Unit-тестом);
-        public async void TestWirteToDatabase5()
+        public async void SetPartnerPromoCodeLimitAsyncTests_SendLimit_LimitExists()
         {
             Partner partner = this.CreateBasePartner();
+            partner.PartnerLimits = new List<PartnerPromoCodeLimit>();
+
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
 
             SetPartnerPromoCodeLimitRequest setPartnerPromoCodeLimitRequest =
@@ -148,7 +150,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
 
             // Assert
             Partner partnerInDB = ((IRepository<Partner>)_partnersRepositoryMock.Object).GetByIdAsync(partner.Id).Result;
-            Assert.NotNull(partnerInDB);
+            Assert.NotEmpty(partnerInDB.PartnerLimits);
         }
 
 
