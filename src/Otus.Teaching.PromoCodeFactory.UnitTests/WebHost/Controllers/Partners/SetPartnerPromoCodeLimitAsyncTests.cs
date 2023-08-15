@@ -3,18 +3,13 @@ using AutoFixture.AutoMoq;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using Namotion.Reflection;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
-using Otus.Teaching.PromoCodeFactory.DataAccess;
-using Otus.Teaching.PromoCodeFactory.DataAccess.Data;
-using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
 using Otus.Teaching.PromoCodeFactory.WebHost.Controllers;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
@@ -28,20 +23,18 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
         {
             var fixture = new Fixture().Customize(new AutoMoqCustomization());
             _partnersRepositoryMock = fixture.Freeze<Mock<IRepository<Partner>>>();
-            _partnersController = fixture.Build<PartnersController>().OmitAutoProperties().Create();
+            _partnersController = new PartnersController(this._partnersRepositoryMock.Object);
         }
 
         //Если партнер не найден, то также нужно выдать ошибку 404;
         [Fact]
         public async void SetPartnerPromoCodeLimitAsyncTests_PatnerIsNotFound_ReturnNotFound()
         {
-            Guid guid = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
-
-            Partner partner = null;
-            _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(guid)).ReturnsAsync(partner);
+            _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
+                .ReturnsAsync((Partner)null);
 
             // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(guid, default(SetPartnerPromoCodeLimitRequest));
+            IActionResult result = await _partnersController.SetPartnerPromoCodeLimitAsync(Guid.NewGuid(), default(SetPartnerPromoCodeLimitRequest));
 
             // Assert
             result.Should().BeAssignableTo<NotFoundResult>();
@@ -57,7 +50,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id)).ReturnsAsync(partner);
 
             // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, default(SetPartnerPromoCodeLimitRequest));
+            IActionResult result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, null);
 
             // Assert
             result.Should().BeAssignableTo<BadRequestObjectResult>();
@@ -149,7 +142,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             IActionResult result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, setPartnerPromoCodeLimitRequest);           /*Задать лимит пользователю*/
 
             // Assert
-            Partner partnerInDB = ((IRepository<Partner>)_partnersRepositoryMock.Object).GetByIdAsync(partner.Id).Result;
+            Partner partnerInDB = await _partnersRepositoryMock.Object.GetByIdAsync(partner.Id);
             Assert.NotEmpty(partnerInDB.PartnerLimits);
         }
 
