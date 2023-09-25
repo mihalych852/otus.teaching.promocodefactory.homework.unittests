@@ -8,7 +8,7 @@ variables:
   test: "Example.Test"
 
 before_script:  
-  - "ll"
+  - "lc"
   - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests/"
   - "apt-get update"
   - "apt-get install -y apt-transport-https"
