@@ -8,6 +8,7 @@ variables:
   test: "Example.Test"
 
 before_script:  
+  - "ll"
   - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests/"
   - "apt-get update"
   - "apt-get install -y apt-transport-https"
@@ -21,11 +22,13 @@ before_script:
 build:
   stage: build
   script:
+    - "ll"
     - "dotnet build"
 
 
 test:
   stage: test
-  script:    
+  script: 
+    - "ll"   
     - "dotnet test"
   
