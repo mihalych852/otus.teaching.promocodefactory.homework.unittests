@@ -1,8 +1,8 @@
 image: microsoft/dotnet:latest
 
-stage:
-  - build
-  - test
+stages:
+  - "build"
+  - "test"
 
 variables:
   test: "Example.Test"
