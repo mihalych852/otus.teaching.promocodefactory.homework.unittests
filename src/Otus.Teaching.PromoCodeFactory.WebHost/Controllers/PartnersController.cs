@@ -82,7 +82,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers {
             var activeLimit = partner.PartnerLimits.FirstOrDefault(x =>
                 !x.CancelDate.HasValue);
 
-            if (activeLimit != null ) {
+            if (activeLimit != null && DateTime.Now < request.EndDate) {
                 //Если партнеру выставляется лимит, то мы 
                 //должны обнулить количество промокодов, которые партнер выдал, если лимит закончился, 
                 //то количество не обнуляется
