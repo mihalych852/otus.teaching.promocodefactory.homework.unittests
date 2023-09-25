@@ -8,6 +8,7 @@ variables:
   test: "Example.Test"
 
 before_script:  
+  - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests/"
   - "apt-get update"
   - "apt-get install -y apt-transport-https"
   - "wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb"
@@ -25,7 +26,6 @@ build:
 
 test:
   stage: test
-  script:
-    - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests/"
+  script:    
     - "dotnet test"
   
