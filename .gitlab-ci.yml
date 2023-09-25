@@ -22,13 +22,13 @@ before_script:
 build:
   stage: build
   script:
-    - "ll"
+    - "lc"
     - "dotnet build"
 
 
 test:
   stage: test
   script: 
-    - "ll"   
+    - "lc"   
     - "dotnet test"
   
