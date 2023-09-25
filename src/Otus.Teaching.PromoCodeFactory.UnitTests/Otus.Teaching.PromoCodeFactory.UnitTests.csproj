@@ -22,4 +22,5 @@
       <ProjectReference Include="..\Otus.Teaching.PromoCodeFactory.WebHost\Otus.Teaching.PromoCodeFactory.WebHost.csproj" />
     </ItemGroup>
 
+
 </Project>
