@@ -26,6 +26,6 @@ build:
 test:
   stage: test
   script:
-    - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests"
+    - "cd src/Otus.Teaching.PromoCodeFactory.Homework.UnitTests/"
     - "dotnet test"
   
