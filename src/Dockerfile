@@ -6,6 +6,7 @@ COPY *.sln .
 COPY */*.csproj ./
 RUN for file in $(ls *.csproj); do mkdir -p ${file%.*} && mv $file ${file%.*}; done
 RUN dotnet restore
+RUN dotnet test 
 
 # copy everything else and build app
 COPY . ./aspnetapp
