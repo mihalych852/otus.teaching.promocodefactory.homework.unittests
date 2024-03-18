@@ -10,6 +10,7 @@ RUN dotnet restore
 # copy everything else and build app
 COPY . ./aspnetapp
 WORKDIR /app/aspnetapp
+RUN dotnet test Otus.Teaching.PromoCodeFactory.UnitTests/Otus.Teaching.PromoCodeFactory.UnitTests.csproj -c Release
 RUN dotnet publish -c Release -o out
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1 AS runtime
