@@ -137,27 +137,27 @@
         }
 
         /// <summary>
-        ///     Новый лимит создался и был вызван метод сохранения в базу
+        ///     Новый лимит создался и был записан в бд
         /// </summary>
         [Fact]
-        public async void SetPartnerPromoCodeLimitAsync_NewLimitCreated_SaveToDbCalled()
+        public async void SetPartnerPromoCodeLimitAsync_NewLimitCreated_NewLimitInDb()
         {
             // Arrange
-            var id = _builder.GetGuid();
+            var context = _builder.GetContext();
             var request = _builder.GetRequest();
             var partner = _builder.GetPartnerWithLimit(true);
-
-            var expected = partner.NumberIssuedPromoCodes;
-
-            _partnersRepositoryMock
-               .Setup(x => x.GetByIdAsync(id))
-               .ReturnsAsync(partner);
+            _builder.AddPartnerToDb(partner, context);
+            var repositoryWithInMemoryDb = _builder.GetRepositoryWithInMemoryDb(context);
+            var controllerWithInMemoryDb = _builder.GetPartnersControllerWithInMemoryDb(repositoryWithInMemoryDb);
 
             // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(id, request);
+            var result = await controllerWithInMemoryDb.SetPartnerPromoCodeLimitAsync(partner.Id, request);
 
             // Assert
-            _partnersRepositoryMock.Verify(mock => mock.UpdateAsync(It.IsAny<Partner>()), Times.Once);
+            var partnerFromDb = await repositoryWithInMemoryDb.GetByIdAsync(partner.Id);
+            var newLimit = partnerFromDb.PartnerLimits.FirstOrDefault(x => x.Limit == request.Limit
+                                                                            && x.EndDate == request.EndDate);
+            Assert.NotNull(newLimit);
         }
     }
 }

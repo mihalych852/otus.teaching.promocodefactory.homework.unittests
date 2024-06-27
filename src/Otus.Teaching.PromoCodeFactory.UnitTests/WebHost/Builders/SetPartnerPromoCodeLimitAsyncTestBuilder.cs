@@ -1,7 +1,11 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
+using Microsoft.EntityFrameworkCore;
 using Otus.Teaching.PromoCodeFactory.Core.Abstractions.Repositories;
 using Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement;
+using Otus.Teaching.PromoCodeFactory.DataAccess;
+using Otus.Teaching.PromoCodeFactory.DataAccess.Repositories;
+using Otus.Teaching.PromoCodeFactory.WebHost.Controllers;
 using Otus.Teaching.PromoCodeFactory.WebHost.Models;
 using System;
 using System.Collections.Generic;
@@ -46,6 +50,31 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Builders
                            .Without(x => x.PartnerLimits)
                            .With(x => x.NumberIssuedPromoCodes, _random.Next(1, 50))
                            .Create();
+        }
+
+        public PartnersController GetPartnersControllerWithInMemoryDb(EfRepository<Partner> repositoryWithInMemoryDb)
+        {
+            return new PartnersController(repositoryWithInMemoryDb);
+        }
+
+        public EfRepository<Partner> GetRepositoryWithInMemoryDb(DataContext context)
+        {
+            return new EfRepository<Partner>(context);
+        }
+
+        public DataContext GetContext()
+        {
+            var options = new DbContextOptionsBuilder<DataContext>()
+            .UseInMemoryDatabase(databaseName: "Test")
+            .Options;
+
+            return new DataContext(options);
+        }
+
+        public void AddPartnerToDb(Partner partner, DataContext context)
+        {
+            context.Add(partner);
+            context.SaveChanges();
         }
 
         public Partner GetPartnerWithLimit(bool isExpiredLimits)
