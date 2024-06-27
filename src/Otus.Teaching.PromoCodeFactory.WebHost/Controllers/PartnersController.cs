@@ -77,6 +77,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
         [HttpPost("{id}/limits")]
         public async Task<IActionResult> SetPartnerPromoCodeLimitAsync(Guid id, SetPartnerPromoCodeLimitRequest request)
         {
+            if (request.Limit <= 0)
+                return BadRequest("Лимит должен быть больше 0");
+
             var partner = await _partnersRepository.GetByIdAsync(id);
 
             if (partner == null)
@@ -101,9 +104,6 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
                 activeLimit.CancelDate = DateTime.Now;
             }
 
-            if (request.Limit <= 0)
-                return BadRequest("Лимит должен быть больше 0");
-            
             var newLimit = new PartnerPromoCodeLimit()
             {
                 Limit = request.Limit,
