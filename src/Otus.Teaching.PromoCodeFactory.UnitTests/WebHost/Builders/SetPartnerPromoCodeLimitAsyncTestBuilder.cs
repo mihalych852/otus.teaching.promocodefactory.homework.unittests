@@ -35,7 +35,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Builders
         public SetPartnerPromoCodeLimitRequest GetRequestWithWrongLimit()
         {
             var request = GetRequest();
-            request.Limit = 0/*_random.Next(-50, 0)*/;
+            request.Limit = _random.Next(-50, 0);
 
             return request;
         }
