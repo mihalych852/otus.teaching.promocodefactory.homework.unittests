@@ -76,22 +76,16 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             cancelLimitDate = cancelLimitStringDate != null
                 ? DateTime.ParseExact(cancelLimitStringDate, "dd.MM.yyyy", CultureInfo.InvariantCulture)
                 : null;
-
-            var partnerId = _dataGenerator.GetRandomUuid();
-
+            
             var partner = _dataGenerator.GetPartner
             (true,
                 new List<PartnerPromoCodeLimit>() { _dataGenerator.GetPartnerPromoCodeLimit(cancelLimitDate) });
 
-            _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partnerId))
+            _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partner.Id))
                 .ReturnsAsync(partner);
 
             var request = _dataGenerator.GetSetPartnerPromoCodeLimitRequest();
-
-            // Act
-            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partnerId, request);
-
-            // Assert
+            
             var expectedNumberIssuedPromoCodes = cancelLimitStringDate == null
                 ? 0
                 : partner.NumberIssuedPromoCodes;
@@ -99,7 +93,11 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             var expectedCancelDateLimit = cancelLimitStringDate == null
                 ? DateTime.Now
                 : partner.PartnerLimits.FirstOrDefault().CancelDate;
-            
+
+            // Act
+            var result = await _partnersController.SetPartnerPromoCodeLimitAsync(partner.Id, request);
+
+            // Assert
             result.Should().BeAssignableTo<CreatedAtActionResult>();
             
             // Проверка на установку значения NumberIssuedPromoCodes
@@ -113,8 +111,8 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
                     x.PartnerLimits.Any(x => x.CancelDate.Value.Date.IsSameOrEqualTo(expectedCancelDateLimit.Value.Date)))), Times.Once);
 
             // Проверка на запись в БД
-            /*_partnersRepositoryMock.Verify(x => x.UpdateAsync(It.Is<Partner>(x =>
-                        x.PartnerLimits.Count == partner.PartnerLimits.Count + 1)));*/
+            _partnersRepositoryMock.Verify(x => x.UpdateAsync(It.Is<Partner>(x =>
+                        x.PartnerLimits.Count == 2)));
         }
     }
 }
