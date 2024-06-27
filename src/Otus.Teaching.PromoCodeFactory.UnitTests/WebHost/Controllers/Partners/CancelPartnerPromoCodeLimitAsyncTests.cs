@@ -52,7 +52,7 @@ namespace Otus.Teaching.PromoCodeFactory.UnitTests.WebHost.Controllers.Partners
             // Arrange
             var partnerId = Guid.Parse("def47943-7aaf-44a1-ae21-05aa4948b165");
             Partner partner = null;
-            
+             
             _partnersRepositoryMock.Setup(repo => repo.GetByIdAsync(partnerId))
                 .ReturnsAsync(partner);
 
