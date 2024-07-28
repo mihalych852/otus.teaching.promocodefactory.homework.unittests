@@ -85,11 +85,10 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost.Controllers
             //Если партнер заблокирован, то нужно выдать исключение
             if (!partner.IsActive)
                 return BadRequest("Данный партнер не активен");
-            
+
             //Установка лимита партнеру
-            var activeLimit = partner.PartnerLimits.FirstOrDefault(x => 
-                !x.CancelDate.HasValue);
-            
+            var activeLimit = partner.ActiveLimit;
+
             if (activeLimit != null)
             {
                 //Если партнеру выставляется лимит, то мы 

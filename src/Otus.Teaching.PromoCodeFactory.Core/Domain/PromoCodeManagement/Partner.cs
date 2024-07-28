@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
 {
@@ -13,5 +14,7 @@ namespace Otus.Teaching.PromoCodeFactory.Core.Domain.PromoCodeManagement
         public bool IsActive { get; set; }
 
         public virtual ICollection<PartnerPromoCodeLimit> PartnerLimits { get; set; }
+
+        public PartnerPromoCodeLimit ActiveLimit => PartnerLimits.FirstOrDefault(x => !x.CancelDate.HasValue);
     }
 }
