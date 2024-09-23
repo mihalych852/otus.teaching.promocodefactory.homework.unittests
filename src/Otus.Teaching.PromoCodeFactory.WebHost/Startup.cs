@@ -80,7 +80,9 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             {
                 endpoints.MapControllers();
             });
-            
+
+            //AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
             dbInitializer.InitializeDb();
         }
     }

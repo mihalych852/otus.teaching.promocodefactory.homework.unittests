@@ -19,13 +19,13 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
 
             //_dataContext.AddRange(FakeDataFactory.Employees);
             //_dataContext.SaveChanges();
-            
+
             //_dataContext.AddRange(FakeDataFactory.Preferences);
             //_dataContext.SaveChanges();
-            
+
             //_dataContext.AddRange(FakeDataFactory.Customers);
             //_dataContext.SaveChanges();
-            
+
             //_dataContext.AddRange(FakeDataFactory.Partners);
             //_dataContext.SaveChanges();
         }
