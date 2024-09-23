@@ -1,0 +1,24 @@
+version: '3.5'
+
+services:
+
+  postgres:
+    image: postgres
+    hostname: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+volumes:
+  pg-data:
+  
+networks:
+  default:
+    name: myLocalNetwork # создана извне: docker network create --driver=bridge myLocalNetwork
+    external: true
+    

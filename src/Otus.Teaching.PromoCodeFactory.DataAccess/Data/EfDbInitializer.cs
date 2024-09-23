@@ -14,20 +14,20 @@ namespace Otus.Teaching.PromoCodeFactory.DataAccess.Data
         
         public void InitializeDb()
         {
-            _dataContext.Database.EnsureDeleted();
-            _dataContext.Database.EnsureCreated();
+            //_dataContext.Database.EnsureDeleted();
+            //_dataContext.Database.EnsureCreated();
+
+            //_dataContext.AddRange(FakeDataFactory.Employees);
+            //_dataContext.SaveChanges();
             
-            _dataContext.AddRange(FakeDataFactory.Employees);
-            _dataContext.SaveChanges();
+            //_dataContext.AddRange(FakeDataFactory.Preferences);
+            //_dataContext.SaveChanges();
             
-            _dataContext.AddRange(FakeDataFactory.Preferences);
-            _dataContext.SaveChanges();
+            //_dataContext.AddRange(FakeDataFactory.Customers);
+            //_dataContext.SaveChanges();
             
-            _dataContext.AddRange(FakeDataFactory.Customers);
-            _dataContext.SaveChanges();
-            
-            _dataContext.AddRange(FakeDataFactory.Partners);
-            _dataContext.SaveChanges();
+            //_dataContext.AddRange(FakeDataFactory.Partners);
+            //_dataContext.SaveChanges();
         }
     }
 }

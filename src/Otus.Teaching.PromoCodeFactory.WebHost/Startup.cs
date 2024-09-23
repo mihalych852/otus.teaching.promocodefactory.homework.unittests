@@ -38,8 +38,11 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             services.AddScoped<IDbInitializer, EfDbInitializer>();
             services.AddDbContext<DataContext>(x =>
             {
-                x.UseSqlite("Filename=PromoCodeFactoryDb.sqlite");
-                //x.UseNpgsql(Configuration.GetConnectionString("PromoCodeFactoryDb"));
+                //x.UseSqlite("Filename=PromoCodeFactoryDb.sqlite");
+                x.UseNpgsql(string.Format(Configuration.GetConnectionString("PromoCodeDb")
+                    , Environment.GetEnvironmentVariable("ASPNETCORE_DBBASE")
+                    , Environment.GetEnvironmentVariable("ASPNETCORE_DBUSER")
+                    , Environment.GetEnvironmentVariable("ASPNETCORE_DBPASSWORD")));
                 x.UseSnakeCaseNamingConvention();
                 x.UseLazyLoadingProxies();
             });
@@ -64,7 +67,7 @@ namespace Otus.Teaching.PromoCodeFactory.WebHost
             }
 
             app.UseOpenApi();
-            app.UseSwaggerUi3(x =>
+            app.UseSwaggerUi(x =>
             {
                 x.DocExpansion = "list";
             });

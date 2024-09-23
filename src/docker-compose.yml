@@ -1,0 +1,28 @@
+services:
+  promocode:
+    image: ${DOCKER_REGISTRY-}promocode
+    build:
+      context: .
+      dockerfile: Otus.Teaching.PromoCodeFactory.WebHost/Dockerfile
+    ports:
+      - "5001:8080"
+      - "5036:8081"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_DBUSER=${ASPNETCORE_DBUSER}
+      - ASPNETCORE_DBPASSWORD=${ASPNETCORE_DBPASSWORD}
+      - ASPNETCORE_DBBASE=${ASPNETCORE_DBBASE}
+    depends_on:
+    - postgresDbPromoCode  
+  postgresDbPromoCode:
+    image: postgres:latest
+    environment:
+      POSTGRES_DB: ${ASPNETCORE_DBBASE}
+      POSTGRES_USER: ${ASPNETCORE_DBUSER}
+      POSTGRES_PASSWORD: ${ASPNETCORE_DBPASSWORD}
+    ports:
+      - "5433:${ASPNETCORE_DBPORT}"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+volumes:
+  postgres_data:
