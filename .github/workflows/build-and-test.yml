@@ -17,11 +17,11 @@ jobs:
         dotnet-version: '8.0'  
 
     - name: Restore dependencies
-      run: dotnet build
+      run: dotnet restore ./Otus.Teaching.PromoCodeFactory.WebHost/Otus.Teaching.PromoCodeFactory.WebHost.csproj
       working-directory: src
 
     - name: Build the solution
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore ./Otus.Teaching.PromoCodeFactory.WebHost/Otus.Teaching.PromoCodeFactory.WebHost.csproj
       working-directory: src
 
     - name: Run tests
