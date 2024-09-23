@@ -17,7 +17,7 @@ jobs:
         dotnet-version: '8.0'  
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet build
       working-directory: src
 
     - name: Build the solution
